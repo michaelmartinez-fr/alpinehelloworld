@@ -8,7 +8,7 @@ ADD ./webapp/requirements.txt /tmp/requirements.txt
 # Install dependencies
 # RUN pip3 install --no-cache-dir -q -r /tmp/requirements.txt
 # RUN pipx install --no-cache-dir -q -r /tmp/requirements.txt
-RUN uv pip install --no-cache-dir -q -r /tmp/requirements.txt
+RUN uv pip install --no-cache-dir -q -r /tmp/requirements.txt --system
 
 # Add our code
 ADD ./webapp /opt/webapp/
