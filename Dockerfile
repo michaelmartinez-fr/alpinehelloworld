@@ -28,5 +28,6 @@ USER myuser
 
 # Run the app.  CMD is required to run on Heroku
 # $PORT is set by Heroku			
-CMD gunicorn --bind 0.0.0.0:$PORT wsgi 
-
+# CMD gunicorn --bind 0.0.0.0:$PORT wsgi
+# Run the app with the virtual environment activated
+CMD ["/bin/bash", "-c", "source /opt/venv/bin/activate && gunicorn --bind 0.0.0.0:$PORT wsgi"]
