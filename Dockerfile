@@ -8,11 +8,16 @@ ADD ./webapp/requirements.txt /tmp/requirements.txt
 # Install dependencies
 # RUN pip3 install --no-cache-dir -q -r /tmp/requirements.txt
 # RUN pipx install --no-cache-dir -q -r /tmp/requirements.txt
-RUN uv pip install --no-cache-dir -q -r /tmp/requirements.txt --system
+# RUN uv pip install --no-cache-dir -q -r /tmp/requirements.txt --system
 
 # Add our code
 ADD ./webapp /opt/webapp/
 WORKDIR /opt/webapp
+
+# Créer un environnement virtuel et installer les dépendances
+RUN uv venv /opt/venv && \
+    . /opt/venv/bin/activate && \
+    uv pip install --no-cache-dir -q -r /tmp/requirements.txt
 
 # Expose is NOT supported by Heroku
 # EXPOSE 5000 		
