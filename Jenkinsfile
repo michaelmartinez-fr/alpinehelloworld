@@ -15,8 +15,8 @@ pipeline {
     // STG_APP_ENDPOINT = "${PARAM_STG_APP_ENDPOINT}"        /* Mettre le couple IP:PORT votre application en staging, exemple 100.25.147.76:8000 */
 
     // got from test Open Port 1993: For API use -1993., for APP use -80
-    PROD_API_ENDPOINT =  "ip10-0-4-5-d6o08i657ed000ep8p20-1993.direct.docker.labs.eazytraining.fr"  /* "${PARAM_PROD_API_ENDPOINT}" */      /* Mettre le couple IP:PORT de votre API eazylabs, 100.25.147.76:1993 */
-    PROD_APP_ENDPOINT =  "ip10-0-4-5-d6o08i657ed000ep8p20-80.direct.docker.labs.eazytraining.fr"   /* "${PARAM_PROD_APP_ENDPOINT}" */
+    PROD_API_ENDPOINT =  "ip10-0-2-5-d6o1rmm57ed000fbtukg-1993.direct.docker.labs.eazytraining.fr"  /* "${PARAM_PROD_API_ENDPOINT}" */      /* Mettre le couple IP:PORT de votre API eazylabs, 100.25.147.76:1993 */
+    PROD_APP_ENDPOINT =  "ip10-0-2-5-d6o1rmm57ed000fbtukg-80.direct.docker.labs.eazytraining.fr"   /* "${PARAM_PROD_APP_ENDPOINT}" */
     INTERNAL_PORT = "5000"
     APP_EXPOSED_PORT = 80 /* "${PARAM_PORT_EXPOSED}" */            /*80 par défaut*/
     EXTERNAL_PORT = 80   /* "${PARAM_PORT_EXPOSED}" */
@@ -95,11 +95,10 @@ pipeline {
        steps {
           script {
             sh """
-              # echo  {\\"your_name\\":\\"${APP_NAME}\\",\\"container_image\\":\\"${CONTAINER_IMAGE}\\", \\"external_port\\":\\"${EXTERNAL_PORT}\\", \\"internal_port\\":\\"${INTERNAL_PORT}\\"}  > data.json 
               # APP_NAME = IMAGE_NAME, container_image: micmartin/alpinehelloworld:0.3, external port 80, internal port 5000
               echo  {\\"your_name\\":\\"${APP_NAME}\\",\\"container_image\\":\\"${CONTAINER_IMAGE}\\", \\"external_port\\":\\"${EXTERNAL_PORT}\\", \\"internal_port\\":\\"${INTERNAL_PORT}\\"}  > data.json
               # https NEEDED prod used to create prod-alpinehelloworld
-              curl -v -X POST https://${PROD_API_ENDPOINT}/prod -H 'Content-Type: application/json'  --data-binary @data.json  /* 2>&1 | grep 200 */
+              curl -v -X POST https://${PROD_API_ENDPOINT}/prod -H 'Content-Type: application/json' --data-binary @data.json  /* 2>&1 | grep 200 */
             """
           }
        }
