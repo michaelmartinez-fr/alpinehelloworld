@@ -1,11 +1,11 @@
 pipeline {
   environment {
     IMAGE_NAME = "alpinehelloworld"
-    IMAGE_TAG = "latest"
+    IMAGE_TAG = "0.2"
     STAGING = "easzy-staging"
     PRODUCTION = "eazy-production"
   }
-  # default
+  // default use none
   agent none
   stages {
       stage('Build image') {
@@ -20,7 +20,7 @@ pipeline {
         agent any
         steps {
           script {
-            # multilines
+            // multilines
             sh '''
               docker run -d -p 80:5000 -e PORT=5000 --name ${IMAGE_NAME} micmartin/${IMAGE_NAME}:${IMAGE_TAG}
               sleep 5
@@ -32,18 +32,18 @@ pipeline {
         agent any
         steps {
           script {
-            # multilines
+            // multilines
             sh '''
               curl http://localhost | grep -q "Hello world!"
             '''
           }
         }
       }
-      stage('clean container') {
+      stage('Clean container') {
         agent any
         steps {
           script {
-            # multilines
+            // multilines
             sh '''
               docker rm -f ${IMAGE_NAME}
             '''
@@ -54,7 +54,7 @@ pipeline {
         agent any
         steps {
           script {
-            # multilines
+            // multilines
             sh '''
               curl http://localhost | grep -q "Hello world!"
             '''
@@ -67,13 +67,14 @@ pipeline {
              }
         agent any
         environment {
-            DOCKERHUB_PAT = credentials('dockerhub_pat')
+            DOCKERHUB_PAT = credentials('dockerhub_pat_devo')
         }
         steps {
           script {
             sh '''
-              docker login -u micmartin -p ${DOCKERHUB_PAT}
-              docker push micmartin/${IMAGE_NAME}
+              # docker login -u micmartin -p ${DOCKERHUB_PAT}
+              echo $DOCKERHUB_PAT | docker login -u micmartin --password-stdin
+              docker push micmartin/${IMAGE_NAME}:${IMAGE_TAG}
             '''
           }
         }
