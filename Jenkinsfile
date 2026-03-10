@@ -2,9 +2,10 @@ pipeline {
   environment {
     IMAGE_NAME = "alpinehelloworld"
     IMAGE_TAG = "0.2"
+    DOCKERHUB_USERNAME = "micmartin"
+    DOCKERHUB_PAT = credentials('dockhub_pat_devo')
     STAGING = "easzy-staging"
     PRODUCTION = "eazy-production"
-    DOCKER_USERNAME = "micmartin"
   }
   // default use none
   agent none
@@ -13,7 +14,7 @@ pipeline {
         agent any
         steps {
           script {
-            sh 'docker build -t ${DOCKER_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG} .'
+            sh 'docker build -t ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG} .'
           }
         }
       }
@@ -25,7 +26,7 @@ pipeline {
             sh '''
               echo "Cleaning existing container if exist"
               docker ps -a | grep -i $IMAGE_NAME && docker rm -f $IMAGE_NAME
-              docker run -d -p 80:5000 -e PORT=5000 --name ${IMAGE_NAME} ${DOCKER_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
+              docker run -d -p 80:5000 -e PORT=5000 --name ${IMAGE_NAME} ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
               sleep 5
             '''
           }
@@ -58,14 +59,11 @@ pipeline {
               expression { GIT_BRANCH == 'origin/master' }
              }
         agent any
-        environment {
-            DOCKERHUB_PAT = credentials('dockhub_pat_devo')
-        }
         steps {
           script {
             sh '''
-              echo ${DOCKERHUB_PAT} | docker login -u ${DOCKER_USERNAME} --password-stdin
-              docker push ${DOCKER_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
+              echo ${DOCKERHUB_PAT} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin
+              docker push ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
             '''
           }
         }
