@@ -1,7 +1,7 @@
 pipeline {
   environment {
     IMAGE_NAME = "alpinehelloworld"
-    IMAGE_TAG = "0.3"
+    IMAGE_TAG = "0.4"
     DOCKERHUB_USERNAME = "micmartin"
     // here or in an stage's environment {}
     // MUST set a credential of type "Secret text" with ID=dockhub_pat_devo and secret=XXXXX
@@ -98,7 +98,8 @@ pipeline {
               # echo  {\\"your_name\\":\\"${APP_NAME}\\",\\"container_image\\":\\"${CONTAINER_IMAGE}\\", \\"external_port\\":\\"${EXTERNAL_PORT}\\", \\"internal_port\\":\\"${INTERNAL_PORT}\\"}  > data.json 
               # APP_NAME = IMAGE_NAME, container_image: micmartin/alpinehelloworld:0.3, external port 80, internal port 5000
               echo  {\\"your_name\\":\\"${APP_NAME}\\",\\"container_image\\":\\"${CONTAINER_IMAGE}\\", \\"external_port\\":\\"${EXTERNAL_PORT}\\", \\"internal_port\\":\\"${INTERNAL_PORT}\\"}  > data.json
-              curl -v -X POST http://${PROD_API_ENDPOINT}/prod -H 'Content-Type: application/json'  --data-binary @data.json  2>&1 | grep 200
+              // https needed ! prod used to create prod-alpinehelloworld
+              curl -v -X POST https://${PROD_API_ENDPOINT}/prod -H 'Content-Type: application/json'  --data-binary @data.json  /* 2>&1 | grep 200 */
             """
           }
        }
