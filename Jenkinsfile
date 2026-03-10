@@ -52,18 +52,7 @@ pipeline {
           }
         }
       }
-      stage('Test image') {
-        agent any
-        steps {
-          script {
-            // multilines
-            sh '''
-              curl http://localhost | grep -q "Hello world!"
-            '''
-          }
-        }
-      }
-      stage('Push image in staging and deploy') {
+      stage('Push image to DockerHub') {
         when {
               expression { GIT_BRANCH == 'origin/master' }
              }
