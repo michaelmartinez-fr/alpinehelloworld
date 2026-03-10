@@ -1,6 +1,6 @@
 
 /* Import shread-library */
-@Library('shared-library-jenkins')
+@Library('jenkins-shared-library')
 
 pipeline {
   environment {
