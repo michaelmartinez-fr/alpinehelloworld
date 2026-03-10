@@ -58,7 +58,7 @@ pipeline {
              }
         agent any
         environment {
-            DOCKERHUB_PAT = credentials('dockerhub_pat_devo')
+            DOCKERHUB_PAT = credentials('dockhub_pat_devo')
         }
         steps {
           script {
