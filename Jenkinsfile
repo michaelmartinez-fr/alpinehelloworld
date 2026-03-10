@@ -3,7 +3,10 @@ pipeline {
     IMAGE_NAME = "alpinehelloworld"
     IMAGE_TAG = "0.2"
     DOCKERHUB_USERNAME = "micmartin"
-    DOCKERHUB_PAT = credentials('dockhub_pat_devo')
+    // here or in an stage's environment {}
+    // MUST set a credential of type "Secret text" with ID=dockhub_pat_devo and secret=XXXXX
+    // no other explicit set of the credential of pipeline definition
+    // DOCKERHUB_PAT = credentials('dockhub_pat_devo')
     STAGING = "easzy-staging"
     PRODUCTION = "eazy-production"
   }
@@ -36,7 +39,6 @@ pipeline {
         agent any
         steps {
           script {
-            // multilines
             sh '''
               curl http://localhost | grep -q "Hello world!"
             '''
@@ -47,7 +49,6 @@ pipeline {
         agent any
         steps {
           script {
-            // multilines
             sh '''
               docker rm -f ${IMAGE_NAME}
             '''
@@ -58,6 +59,9 @@ pipeline {
         when {
               expression { GIT_BRANCH == 'origin/master' }
              }
+        environment {
+              DOCKERHUB_PAT = credentials('dockhub_pat_devo')
+            }
         agent any
         steps {
           script {
