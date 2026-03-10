@@ -64,7 +64,8 @@ pipeline {
           script {
             sh '''
               #echo "PAT: ${DOCKERHUB_PAT}"
-              docker login -u micmartin -p ${DOCKERHUB_PAT}
+              #docker login -u micmartin -p ${DOCKERHUB_PAT}
+              echo ${DOCKERHUB_PAT} | docker login -u micmartin --password-stdin
               #echo ${DOCKERHUB_PAT} | docker login -u micmartin --password-stdin
               docker push micmartin/${IMAGE_NAME}:${IMAGE_TAG}
             '''
