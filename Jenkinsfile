@@ -98,7 +98,7 @@ pipeline {
               # echo  {\\"your_name\\":\\"${APP_NAME}\\",\\"container_image\\":\\"${CONTAINER_IMAGE}\\", \\"external_port\\":\\"${EXTERNAL_PORT}\\", \\"internal_port\\":\\"${INTERNAL_PORT}\\"}  > data.json 
               # APP_NAME = IMAGE_NAME, container_image: micmartin/alpinehelloworld:0.3, external port 80, internal port 5000
               echo  {\\"your_name\\":\\"${APP_NAME}\\",\\"container_image\\":\\"${CONTAINER_IMAGE}\\", \\"external_port\\":\\"${EXTERNAL_PORT}\\", \\"internal_port\\":\\"${INTERNAL_PORT}\\"}  > data.json
-              // https needed ! prod used to create prod-alpinehelloworld
+              # https NEEDED prod used to create prod-alpinehelloworld
               curl -v -X POST https://${PROD_API_ENDPOINT}/prod -H 'Content-Type: application/json'  --data-binary @data.json  /* 2>&1 | grep 200 */
             """
           }
