@@ -1,3 +1,7 @@
+
+/* Import shread-library */
+@Library('shared-library-jenkins')
+
 pipeline {
   environment {
     IMAGE_NAME = "alpinehelloworld"
@@ -106,13 +110,11 @@ pipeline {
   } // end stages
   // post action after the end of the pipeline
   post {
-    success {
-      slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+     always {
+       script {
+         /* slackNotifier.groovy provide current build result as parameter */
+         slackNotifier currentBuild.result
+       }
+    }
   }
-    failure {
-      slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-    }   
-  }
-
- 
 }
